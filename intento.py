@@ -1,31 +1,21 @@
 import serial
 import pynput.keyboard
-import time
 
-# Configura el puerto serial (ajusta COM3 si tu puerto es diferente)
-puerto_serial = 'COM3'  # Cambia este valor si tu puerto es otro
-
-# Abre el puerto serial
-arduino = serial.Serial(puerto_serial, 9600, timeout=1)
-
-# Configura el controlador de teclado
+# Establecer la conexión serial - IMPORTANTE VER EL COM Y EL NUMERO SIEMPRE EN 9600
+arduino = serial.Serial('COM6', 9600)
 keyboard = pynput.keyboard.Controller()
 
-# Esperar un poco para establecer la conexión
-time.sleep(1)
-
-print("Esperando la tecla...")
-
 while True:
-    # Lee los datos enviados por Arduino
-    data = arduino.readline().decode('utf-8').strip()  # Lee una línea y elimina espacios
-
-    # Verifica si se ha recibido la letra 'D'
-    if data == 'D':
-        print("Botón presionado! Simulando la tecla 'D'.")
-        keyboard.press('d')  # Simula la pulsación de la tecla 'd'
-        keyboard.release('d')  # Libera la tecla
-    elif data == ' ':
-        print("Botón no presionado.")
-    
-    time.sleep(0.1)  # Pausa para evitar sobrecargar el loop
+    if arduino.in_waiting > 0:
+        command = arduino.readline().decode('utf-8').strip()  # Leer y decodificar el comando
+        print(f"Comando recibido: {command}")
+        
+        if command == "left":
+            keyboard.press(pynput.keyboard.Key.left)  # Usar Key.left para la flecha izquierda
+            keyboard.release(pynput.keyboard.Key.left)
+        elif command == "right":
+            keyboard.press(pynput.keyboard.Key.right)  # Usar Key.right para la flecha derecha
+            keyboard.release(pynput.keyboard.Key.right)
+        elif command == "d":
+            keyboard.press('d')  # Para la letra "d"
+            keyboard.release('d')

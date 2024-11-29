@@ -2,7 +2,7 @@ import serial
 import pynput.keyboard
 
 # Establecer la conexión serial - IMPORTANTE VER EL COM Y EL NUMERO SIEMPRE EN 9600
-arduino = serial.Serial('COM6', 9600)
+arduino = serial.Serial('COM3', 9600)
 keyboard = pynput.keyboard.Controller()
 
 while True:
@@ -19,3 +19,7 @@ while True:
         elif command == "d":
             keyboard.press('d')  # Para la letra "d"
             keyboard.release('d')
+        elif command == "k":
+            keyboard.press('k')  # Para la letra "k"
+            keyboard.release('k')
+
